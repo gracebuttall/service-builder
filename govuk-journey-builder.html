@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOV.UK Prototype Kit Generator</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f3f2f1;
+      line-height: 1.5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #0b0c0c;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #0b0c0c;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: #505a5f;
+    }
+    
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #0b0c0c;
+    }
+    
+    textarea, input {
+      font-family: inherit;
+      font-size: 1rem;
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #505a5f;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    button {
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s;
+    }
+    
+    button:disabled {
+      background-color: #b1b4b6;
+      cursor: not-allowed;
+    }
+    
+    .btn-primary {
+      background-color: #00703c;
+      color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background-color: #005a30;
+    }
+    
+    .btn-secondary {
+      background-color: #f3f2f1;
+      color: #0b0c0c;
+      border: 2px solid #0b0c0c;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #dbdad9;
+    }
+    
+    .btn-danger {
+      background-color: #d4351c;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #aa2a16;
+    }
+    
+    .example-link {
+      display: block;
+      color: #1d70b8;
+      text-decoration: underline;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      text-align: left;
+    }
+    
+    .example-link:hover {
+      color: #003078;
+    }
+    
+    .error-box {
+      border-left: 4px solid #d4351c;
+      background-color: #fef7f7;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: start;
+      gap: 1rem;
+    }
+    
+    .error-text {
+      color: #d4351c;
+    }
+    
+    .info-box {
+      border-left: 4px solid #1d70b8;
+      background-color: #f3f9ff;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+    
+    .info-box code {
+      background-color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    
+    .info-box ol {
+      margin-left: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .info-box li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .info-box a {
+      color: #1d70b8;
+      text-decoration: underline;
+    }
+    
+    .tabs {
+      background-color: #383f43;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tab-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .tab-button {
+      background-color: transparent;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .tab-button.active {
+      background-color: white;
+      color: #0b0c0c;
+    }
+    
+    .tab-button:hover:not(.active) {
+      background-color: #505a5f;
+    }
+    
+    .code-header {
+      background-color: #2b2b2b;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .code-info {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .code-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .btn-code {
+      background-color: #505a5f;
+      color: white;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .btn-code:hover {
+      background-color: #383f43;
+    }
+    
+    .btn-success {
+      background-color: #00703c;
+    }
+    
+    pre {
+      background-color: #2b2b2b;
+      color: #f8f8f2;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .preview-container {
+      background-color: white;
+      padding: 2rem;
+    }
+    
+    .preview-notice {
+      border-left: 4px solid #1d70b8;
+      background-color: #f3f9ff;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .preview-content {
+      max-width: 800px;
+    }
+    
+    .preview-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .preview-field {
+      margin-bottom: 2rem;
+    }
+    
+    .preview-field label {
+      font-size: 1.2rem;
+    }
+    
+    .preview-field input[type="radio"],
+    .preview-field input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+    
+    .preview-field input[type="text"],
+    .preview-field textarea,
+    .preview-field select {
+      max-width: 500px;
+    }
+    
+    .preview-option {
+      margin-bottom: 0.75rem;
+    }
+    
+    .preview-hint {
+      color: #505a5f;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .preview-warning {
+      border-left: 10px solid #ffdd00;
+      background-color: #fffbea;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .preview-inset {
+      border-left: 4px solid #b1b4b6;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .preview-panel {
+      background-color: #00703c;
+      color: white;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .preview-panel h2 {
+      color: white;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-summary {
+      border-top: 1px solid #b1b4b6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .preview-summary-row {
+      border-bottom: 1px solid #b1b4b6;
+      padding: 0.75rem 0;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1rem;
+    }
+    
+    .preview-summary-key {
+      font-weight: 700;
+    }
+    
+    .preview-nav {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #b1b4b6;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function GovUKJourneyBuilder() {
+      const [command, setCommand] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [journey, setJourney] = useState(null);
+      const [error, setError] = useState('');
+      const [viewMode, setViewMode] = useState('preview');
+      const [currentPage, setCurrentPage] = useState(0);
+      const [copied, setCopied] = useState(false);
+      const [apiKey, setApiKey] = useState('');
+      const [showApiSetup, setShowApiSetup] = useState(true);
+
+      const exampleCommands = [
+        "Create a journey to report a lost passport with pages for personal details, loss details, and confirmation",
+        "Build a service for applying for a Blue Badge with eligibility check, personal information, and supporting documents",
+        "Make a journey for registering a birth with parent details, baby details, and appointment booking"
+      ];
+
+      const generateJourney = async () => {
+        if (!command.trim()) {
+          setError('Please enter a command');
+          return;
+        }
+
+        if (!apiKey.trim()) {
+          setError('Please enter your Anthropic API key');
+          setShowApiSetup(true);
+          return;
+        }
+
+        setLoading(true);
+        setError('');
+        
+        try {
+          const response = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": apiKey,
+              "anthropic-version": "2023-06-01"
+            },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-20250514",
+              max_tokens: 4000,
+              messages: [
+                {
+                  role: "user",
+                  content: `You are a GOV.UK service designer. Convert this command into a JSON service journey definition.
+
+Command: "${command}"
+
+Return ONLY valid JSON (no markdown, no preamble) with this structure:
+{
+  "serviceName": "Service title",
+  "pages": [
+    {
+      "id": "page-id",
+      "path": "/page-url",
+      "title": "Page title",
+      "components": [
+        {
+          "type": "heading|paragraph|radios|checkboxes|text-input|textarea|date-input|file-upload|select|warning-text|inset-text|details|button|panel|summary-list",
+          "content": "text content",
+          "label": "field label (for inputs)",
+          "hint": "hint text (optional)",
+          "name": "field-name",
+          "options": ["option1", "option2"],
+          "items": [{"key": "Key", "value": "Value"}],
+          "rows": 5,
+          "accept": ".pdf,.jpg",
+          "summary": "summary text for details"
+        }
+      ],
+      "nextPage": "/next-page-url"
+    }
+  ]
+}
+
+Use appropriate GOV.UK patterns. Include a start page, question pages, and a confirmation page.`
+                }
+              ],
+            })
+          });
+
+          const data = await response.json();
+          
+          if (data.error) {
+            throw new Error(data.error.message || 'API request failed');
+          }
+          
+          const text = data.content.find(c => c.type === 'text')?.text || '';
+          
+          const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+          const journeyData = JSON.parse(cleanText);
+          
+          setJourney(journeyData);
+          setCurrentPage(0);
+          setShowApiSetup(false);
+        } catch (err) {
+          setError('Failed to generate journey: ' + err.message);
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const generateNunjucksTemplate = (page) => {
+        let template = `{% extends "layouts/main.html" %}
+
+{% block pageTitle %}
+  ${page.title} – ${journey.serviceName}
+{% endblock %}
+
+{% block beforeContent %}
+`;
+
+        const pageIndex = journey.pages.findIndex(p => p.id === page.id);
+        if (pageIndex > 0) {
+          const prevPage = journey.pages[pageIndex - 1];
+          template += `  {{ govukBackLink({
+    text: "Back",
+    href: "${prevPage.path}"
+  }) }}
+`;
+        }
+
+        template += `{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+`;
+
+        page.components?.forEach(component => {
+          switch (component.type) {
+            case 'heading':
+              template += `      <h1 class="govuk-heading-xl">${component.content}</h1>
+
+`;
+              break;
+
+            case 'paragraph':
+              template += `      <p class="govuk-body">${component.content}</p>
+
+`;
+              break;
+
+            case 'radios':
+              template += `      {{ govukRadios({
+        name: "${component.name}",
+        fieldset: {
+          legend: {
+            text: "${component.label}",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        ${component.hint ? `hint: {
+          text: "${component.hint}"
+        },
+        ` : ''}items: [
+${component.options?.map(opt => `          {
+            value: "${opt.toLowerCase().replace(/\s+/g, '-')}",
+            text: "${opt}"
+          }`).join(',\n')}
+        ]
+      }) }}
+
+`;
+              break;
+
+            case 'checkboxes':
+              template += `      {{ govukCheckboxes({
+        name: "${component.name}",
+        fieldset: {
+          legend: {
+            text: "${component.label}",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        ${component.hint ? `hint: {
+          text: "${component.hint}"
+        },
+        ` : ''}items: [
+${component.options?.map(opt => `          {
+            value: "${opt.toLowerCase().replace(/\s+/g, '-')}",
+            text: "${opt}"
+          }`).join(',\n')}
+        ]
+      }) }}
+
+`;
+              break;
+
+            case 'text-input':
+              template += `      {{ govukInput({
+        label: {
+          text: "${component.label}",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        ${component.hint ? `hint: {
+          text: "${component.hint}"
+        },
+        ` : ''}id: "${component.name}",
+        name: "${component.name}"
+      }) }}
+
+`;
+              break;
+
+            case 'textarea':
+              template += `      {{ govukTextarea({
+        name: "${component.name}",
+        id: "${component.name}",
+        label: {
+          text: "${component.label}",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        ${component.hint ? `hint: {
+          text: "${component.hint}"
+        },
+        ` : ''}rows: ${component.rows || 5}
+      }) }}
+
+`;
+              break;
+
+            case 'date-input':
+              template += `      {{ govukDateInput({
+        id: "${component.name}",
+        namePrefix: "${component.name}",
+        fieldset: {
+          legend: {
+            text: "${component.label}",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        }${component.hint ? `,
+        hint: {
+          text: "${component.hint}"
+        }` : ''}
+      }) }}
+
+`;
+              break;
+
+            case 'file-upload':
+              template += `      {{ govukFileUpload({
+        id: "${component.name}",
+        name: "${component.name}",
+        label: {
+          text: "${component.label}",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        }${component.hint ? `,
+        hint: {
+          text: "${component.hint}"
+        }` : ''}
+      }) }}
+
+`;
+              break;
+
+            case 'select':
+              template += `      {{ govukSelect({
+        id: "${component.name}",
+        name: "${component.name}",
+        label: {
+          text: "${component.label}",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        ${component.hint ? `hint: {
+          text: "${component.hint}"
+        },
+        ` : ''}items: [
+          {
+            value: "",
+            text: "Select an option"
+          },
+${component.options?.map(opt => `          {
+            value: "${opt.toLowerCase().replace(/\s+/g, '-')}",
+            text: "${opt}"
+          }`).join(',\n')}
+        ]
+      }) }}
+
+`;
+              break;
+
+            case 'warning-text':
+              template += `      {{ govukWarningText({
+        text: "${component.content}",
+        iconFallbackText: "Warning"
+      }) }}
+
+`;
+              break;
+
+            case 'inset-text':
+              template += `      {{ govukInsetText({
+        text: "${component.content}"
+      }) }}
+
+`;
+              break;
+
+            case 'details':
+              template += `      {{ govukDetails({
+        summaryText: "${component.summary || 'More details'}",
+        text: "${component.content}"
+      }) }}
+
+`;
+              break;
+
+            case 'panel':
+              template += `      {{ govukPanel({
+        titleText: "${component.title}",
+        html: "${component.content}"
+      }) }}
+
+`;
+              break;
+
+            case 'summary-list':
+              template += `      {{ govukSummaryList({
+        rows: [
+${component.items?.map(item => `          {
+            key: {
+              text: "${item.key}"
+            },
+            value: {
+              text: "${item.value}"
+            }
+          }`).join(',\n')}
+        ]
+      }) }}
+
+`;
+              break;
+
+            case 'button':
+              if (page.nextPage) {
+                template += `      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "${component.content || 'Continue'}",
+          href: "${page.nextPage}"
+        }) }}
+      </div>
+
+`;
+              }
+              break;
+          }
+        });
+
+        template += `    </div>
+  </div>
+{% endblock %}`;
+
+        return template;
+      };
+
+      const generateRoutesFile = () => {
+        let routes = `//
+// For guidance on how to create routes see:
+// https://prototype-kit.service.gov.uk/docs/create-routes
+//
+
+const govukPrototypeKit = require('govuk-prototype-kit')
+const router = govukPrototypeKit.requests.setupRouter()
+
+// Add your routes here
+`;
+
+        journey.pages.forEach((page) => {
+          if (page.nextPage) {
+            routes += `
+router.post('${page.path}', function(request, response) {
+  response.redirect('${page.nextPage}')
+})
+`;
+          }
+        });
+
+        return routes;
+      };
+
+      const downloadFile = (filename, content) => {
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+
+      const downloadAllFiles = () => {
+        journey.pages.forEach((page) => {
+          const filename = page.path.replace(/^\//, '').replace(/\//g, '-') || 'index';
+          const content = generateNunjucksTemplate(page);
+          downloadFile(`${filename}.html`, content);
+        });
+        
+        downloadFile('routes.js', generateRoutesFile());
+      };
+
+      const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        });
+      };
+
+      const renderPreview = () => {
+        if (!journey || !journey.pages[currentPage]) return null;
+        
+        const page = journey.pages[currentPage];
+        
+        return (
+          <div className="preview-container">
+            <div className="container">
+              <div className="preview-notice">
+                <p style={{marginBottom: 0}}><strong>📋 Preview Mode:</strong> This is a simplified preview. Switch to "Nunjucks" tab to get the actual GOV.UK Prototype Kit code.</p>
+              </div>
+
+              <div className="preview-content">
+                <h1 className="preview-heading">{page.title}</h1>
+                
+                {page.components?.map((component, index) => {
+                  const key = `${component.type}-${index}`;
+                  
+                  switch (component.type) {
+                    case 'heading':
+                      return <h1 key={key} className="preview-heading">{component.content}</h1>;
+                    case 'paragraph':
+                      return <p key={key}>{component.content}</p>;
+                    case 'radios':
+                    case 'checkboxes':
+                      return (
+                        <div key={key} className="preview-field">
+                          <fieldset>
+                            <legend><label>{component.label}</label></legend>
+                            {component.hint && <div className="preview-hint">{component.hint}</div>}
+                            {component.options?.map((opt, i) => (
+                              <div key={i} className="preview-option">
+                                <input 
+                                  type={component.type === 'radios' ? 'radio' : 'checkbox'} 
+                                  id={`${component.name}-${i}`} 
+                                  name={component.name} 
+                                />
+                                <label htmlFor={`${component.name}-${i}`}>{opt}</label>
+                              </div>
+                            ))}
+                          </fieldset>
+                        </div>
+                      );
+                    case 'text-input':
+                      return (
+                        <div key={key} className="preview-field">
+                          <label>{component.label}</label>
+                          {component.hint && <div className="preview-hint">{component.hint}</div>}
+                          <input type="text" />
+                        </div>
+                      );
+                    case 'textarea':
+                      return (
+                        <div key={key} className="preview-field">
+                          <label>{component.label}</label>
+                          {component.hint && <div className="preview-hint">{component.hint}</div>}
+                          <textarea rows={component.rows || 5}></textarea>
+                        </div>
+                      );
+                    case 'select':
+                      return (
+                        <div key={key} className="preview-field">
+                          <label>{component.label}</label>
+                          {component.hint && <div className="preview-hint">{component.hint}</div>}
+                          <select>
+                            <option value="">Select an option</option>
+                            {component.options?.map((opt, i) => (
+                              <option key={i} value={opt}>{opt}</option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    case 'warning-text':
+                      return (
+                        <div key={key} className="preview-warning">
+                          <strong>⚠️ Warning:</strong> {component.content}
+                        </div>
+                      );
+                    case 'inset-text':
+                      return (
+                        <div key={key} className="preview-inset">
+                          {component.content}
+                        </div>
+                      );
+                    case 'panel':
+                      return (
+                        <div key={key} className="preview-panel">
+                          <h2>{component.title}</h2>
+                          <p style={{color: 'white', fontSize: '1.2rem'}}>{component.content}</p>
+                        </div>
+                      );
+                    case 'summary-list':
+                      return (
+                        <div key={key} className="preview-summary">
+                          {component.items?.map((item, i) => (
+                            <div key={i} className="preview-summary-row">
+                              <div className="preview-summary-key">{item.key}</div>
+                              <div>{item.value}</div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    case 'button':
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => {
+                            if (page.nextPage) {
+                              const nextIdx = journey.pages.findIndex(p => p.path === page.nextPage);
+                              if (nextIdx >= 0) setCurrentPage(nextIdx);
+                            }
+                          }}
+                          className="btn-primary"
+                        >
+                          {component.content || 'Continue'}
+                        </button>
+                      );
+                    default:
+                      return null;
+                  }
+                })}
+
+                <div className="preview-nav">
+                  {currentPage > 0 && (
+                    <button onClick={() => setCurrentPage(currentPage - 1)} className="example-link">
+                      ← Previous
+                    </button>
+                  )}
+                  <span style={{color: '#505a5f'}}>Page {currentPage + 1} of {journey.pages.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const renderCode = () => {
+        const page = journey.pages[currentPage];
+        const nunjucksCode = generateNunjucksTemplate(page);
+        
+        return (
+          <div>
+            <div className="code-header">
+              <div className="code-info">
+                <span style={{fontWeight: 'bold'}}>{page.path.replace(/^\//, '') || 'index'}.html</span>
+                <span style={{color: '#b1b4b6'}}>Page {currentPage + 1} of {journey.pages.length}</span>
+              </div>
+              <div className="code-actions">
+                <button
+                  onClick={() => copyToClipboard(nunjucksCode)}
+                  className="btn-code"
+                  style={{backgroundColor: copied ? '#00703c' : '#505a5f'}}
+                >
+                  {copied ? '✓ Copied!' : '📋 Copy'}
+                </button>
+                <button
+                  onClick={downloadAllFiles}
+                  className="btn-code btn-success"
+                >
+                  ⬇ Download All
+                </button>
+              </div>
+            </div>
+            <pre><code>{nunjucksCode}</code></pre>
+          </div>
+        );
+      };
+
+      if (!journey) {
+        return (
+          <div className="container">
+            <h1>GOV.UK Prototype Kit Generator</h1>
+            <p>
+              Describe your service journey in plain English, and I'll generate ready-to-use Nunjucks templates for the GOV.UK Prototype Kit.
+            </p>
+
+            {showApiSetup && (
+              <div style={{marginBottom: '2rem', padding: '1.5rem', backgroundColor: '#fffbea', borderLeft: '4px solid #ffdd00'}}>
+                <h2 style={{fontSize: '1.2rem', marginBottom: '1rem'}}>🔑 API Key Required</h2>
+                <p style={{marginBottom: '1rem'}}>This tool uses Claude AI to generate your service journeys. You'll need an Anthropic API key.</p>
+                <label htmlFor="api-key">Anthropic API Key:</label>
+                <input
+                  id="api-key"
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-ant-..."
+                />
+                <p style={{fontSize: '0.9rem', color: '#505a5f'}}>
+                  Get your API key from <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer">console.anthropic.com</a>. Your key is stored locally in your browser and never sent anywhere except Anthropic's API.
+                </p>
+                <button onClick={() => setShowApiSetup(false)} className="btn-secondary">
+                  Continue
+                </button>
+              </div>
+            )}
+            
+            <div>
+              <label htmlFor="command">Describe your service journey:</label>
+              <textarea
+                id="command"
+                value={command}
+                onChange={(e) => setCommand(e.target.value)}
+                placeholder="e.g., Create a journey to apply for a parking permit with eligibility check, address details, vehicle information, and payment"
+                disabled={loading}
+              />
+            </div>
+            
+            <div style={{marginBottom: '1.5rem'}}>
+              <p style={{fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem'}}>Try these examples:</p>
+              {exampleCommands.map((ex, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCommand(ex)}
+                  className="example-link"
+                  disabled={loading}
+                >
+                  {ex}
+                </button>
+              ))}
+            </div>
+            
+            {error && (
+              <div className="error-box">
+                <span style={{fontSize: '1.5rem'}}>⚠️</span>
+                <div className="error-text">{error}</div>
+              </div>
+            )}
+            
+            <button
+              onClick={generateJourney}
+              disabled={loading || !command.trim()}
+              className="btn-primary"
+            >
+              {loading ? (
+                <>
+                  <span className="spinner"></span>
+                  Generating journey...
+                </>
+              ) : (
+                <>
+                  ▶ Generate Prototype Kit Code
+                </>
+              )}
+            </button>
+
+            <div className="info-box">
+              <h2>📦 How to use the generated code:</h2>
+              <ol>
+                <li>Install the <a href="https://prototype-kit.service.gov.uk/" target="_blank" rel="noopener noreferrer">GOV.UK Prototype Kit</a></li>
+                <li>Click "Download All" to get your Nunjucks templates and routes</li>
+                <li>Place the .html files in <code>app/views/</code></li>
+                <li>Add the routes from routes.js to <code>app/routes.js</code></li>
+                <li>Run <code>npm start</code> and test your prototype</li>
+              </ol>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="tabs">
+            <div className="tab-buttons">
+              <button
+                onClick={() => setViewMode('preview')}
+                className={`tab-button ${viewMode === 'preview' ? 'active' : ''}`}
+              >
+                👁 Preview
+              </button>
+              <button
+                onClick={() => setViewMode('code')}
+                className={`tab-button ${viewMode === 'code' ? 'active' : ''}`}
+              >
+                📝 Nunjucks
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                setJourney(null);
+                setCommand('');
+                setError('');
+                setCurrentPage(0);
+              }}
+              className="btn-secondary"
+            >
+              🔄 New Journey
+            </button>
+          </div>
+          
+          {viewMode === 'preview' ? renderPreview() : renderCode()}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<GovUKJourneyBuilder />);
+  </script>
+</body>
+</html>
